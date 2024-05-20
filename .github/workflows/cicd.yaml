@@ -40,6 +40,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/lambda:${{ github.sha }}
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/lambda:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/lambda:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
