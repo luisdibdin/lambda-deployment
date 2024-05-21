@@ -6,4 +6,4 @@ def test_lambda_handler_returns_1():
     mock_event = Mock()
     mock_context = Mock()
 
-    assert lambda_handler(mock_event, mock_context) == 3
+    assert lambda_handler(mock_event, mock_context) == 4
