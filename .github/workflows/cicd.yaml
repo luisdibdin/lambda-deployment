@@ -11,6 +11,7 @@ permissions:
 
 env:
   AWS_REGION: eu-west-2
+  REPO_NAME: lambda
 
 jobs:
   build:
@@ -32,6 +33,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.REPO_NAME }}
+
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v3
 
@@ -40,9 +47,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/lambda:${{ github.sha }}
-            ${{ steps.login-ecr.outputs.registry }}/lambda:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
