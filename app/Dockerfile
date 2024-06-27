@@ -1,6 +1,6 @@
-FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:194344f
+FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:18b11de
 
-COPY . ${LAMBDA_TASK_ROOT}
+COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
