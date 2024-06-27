@@ -3,8 +3,8 @@ FROM public.ecr.aws/docker/library/python:3.12-alpine
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONBUFFERED=1
 ENV POETRY_NO_INTERACTION=1
-ENV POETRY_VIRTUAL_ENVS_IN_PROJECT=true
-ENV POETRY_VIRTUAL_ENVS_CREATE=true
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_VIRTUALENVS_CREATE=true
 ENV POETRY_CACHE_DIR="/var/cache/pypoetry"
 ENV POETRY_HOME="/usr/local"
 ENV POETRY_VERSION="1.8.3"
@@ -32,6 +32,10 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /var/task
 
+RUN chown -R taskuser:taskgroup /var/task && chmod -R 777 /var/task
+
+USER taskuser
+
 # Install common packages
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-interaction --no-cache --no-ansi --only main
@@ -41,10 +45,6 @@ ENV PATH="/var/task/.venv/bin:$PATH"
 # Copy the entrypoint script
 COPY lambda-entrypoint.sh /lambda-entrypoint.sh
 RUN chmod +x /lambda-entrypoint.sh
-
-RUN chown -R taskuser:taskgroup /var/task && chmod -R 777 /var/task
-
-USER taskuser
 
 # Set the entrypoint
 ENTRYPOINT [ "/lambda-entrypoint.sh" ]

@@ -2,8 +2,7 @@
 name: cicd-base
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   id-token: write
