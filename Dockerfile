@@ -19,5 +19,9 @@ COPY pyproject.toml poetry.lock ./
 # Install project dependencies using Poetry
 RUN poetry install --no-interaction --no-cache --no-ansi --only main
 
+# Ensure the virtual environment is activated in the entrypoint
+COPY lambda-entrypoint.sh /lambda-entrypoint.sh
+RUN chmod +x /lambda-entrypoint.sh
+
 # Set the entrypoint
 ENTRYPOINT [ "/lambda-entrypoint.sh" ]
