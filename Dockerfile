@@ -33,8 +33,8 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 WORKDIR /var/task
 
 # Install common packages
-RUN poetry init --no-interaction
-RUN poetry add boto3 awslambdaric
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --no-interaction --no-cache --no-ansi --only main -C constraints.txt
 
 ENV PATH="/var/task/.venv/bin:$PATH"
 
