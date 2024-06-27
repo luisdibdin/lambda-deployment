@@ -1,27 +1,43 @@
-FROM public.ecr.aws/lambda/python:3.12
+ARG FUNCTION_DIR="/function"
+
+FROM public.ecr.aws/docker/library/python:buster as build-image
+
+ARG FUNCTION_DIR
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONBUFFERED=1
 ENV POETRY_NO_INTERACTION=1
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-ENV POETRY_VIRTUALENVS_CREATE=true
+ENV POETRY_VIRTUALENVS_IN_PROJECT=false
+ENV POETRY_VIRTUALENVS_CREATE=false
 ENV POETRY_CACHE_DIR=/var/cache/pypoetry
 ENV POETRY_HOME=/usr/local
 ENV POETRY_VERSION=1.8.3
-ENV PATH=/var/task/.venv/bin:$PATH
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    g++ \
+    make \
+    cmake \
+    unzip \
+    libcurl4-openssl-dev
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-# Copy pyproject.toml and poetry.lock
-COPY pyproject.toml poetry.lock ./
+RUN mkdir -p ${FUNCTION_DIR}
 
-# Install project dependencies using Poetry
-RUN poetry install --no-interaction --no-cache --no-ansi --only main
+RUN pip install \
+    --target ${FUNCTION_DIR} \
+        awslambdaric
 
-# Ensure the virtual environment is activated in the entrypoint
-COPY lambda-entrypoint.sh /lambda-entrypoint.sh
-RUN chmod +x /lambda-entrypoint.sh
+FROM public.ecr.aws/docker/library/python:buster
 
-# Set the entrypoint
-ENTRYPOINT [ "/lambda-entrypoint.sh" ]
+ARG ${FUNCTION_DIR}
+
+WORKDIR ${FUNCTION_DIR}
+
+COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+
+# Set the default command to handle Lambda invocation
+ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
