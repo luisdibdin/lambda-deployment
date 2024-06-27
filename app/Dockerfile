@@ -1,17 +1,7 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:3e31912
 
-ENV POETRY_VERSION=1.7.1
-ENV PYTHONPATH=${LAMBDA_TASK_ROOT}
+COPY . ${LAMBDA_TASK_ROOT}
 
-WORKDIR ${LAMBDA_TASK_ROOT}
-
-RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
-
-COPY poetry.lock pyproject.toml ./
-
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --only main
-
-COPY app ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD [ "app.lambda_handler" ]
