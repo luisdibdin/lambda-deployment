@@ -1,5 +1,5 @@
 ---
-name: cicd
+name: cicd-base
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 env:
   AWS_REGION: eu-west-2
-  REPO_NAME: lambda
+  REPO_NAME: base-image
 
 jobs:
   build:
