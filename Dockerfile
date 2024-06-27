@@ -32,8 +32,6 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /var/task
 
-RUN chown -R taskuser:taskgroup /var/task && chmod -R 777 /var/task
-
 # Install common packages
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-interaction --no-cache --no-ansi --only main
@@ -43,6 +41,10 @@ ENV PATH="/var/task/.venv/bin:$PATH"
 # Copy the entrypoint script
 COPY lambda-entrypoint.sh /lambda-entrypoint.sh
 RUN chmod +x /lambda-entrypoint.sh
+
+RUN chown -R taskuser:taskgroup /var/task && chmod -R 777 /var/task
+
+USER taskuser
 
 # Set the entrypoint
 ENTRYPOINT [ "/lambda-entrypoint.sh" ]
