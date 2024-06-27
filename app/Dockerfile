@@ -1,5 +1,5 @@
 # Use the previously built image as the base
-FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:e9f0467
+FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:28beb08
 
 # Copy the application code into the container
 COPY . ${LAMBDA_TASK_ROOT}
