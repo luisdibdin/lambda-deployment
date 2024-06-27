@@ -41,5 +41,8 @@ WORKDIR ${FUNCTION_DIR}
 
 COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 
+ENV LAMBDA_TASK_ROOT=${FUNCTION_DIR}
+
 # Set the default command to handle Lambda invocation
 ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
+
