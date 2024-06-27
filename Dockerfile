@@ -32,10 +32,6 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /var/task
 
-RUN chown -R taskuser:taskgroup /var/task && chmod -R 777 /var/task
-
-USER taskuser
-
 # Install common packages
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-interaction --no-cache --no-ansi --only main
