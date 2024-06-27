@@ -1,4 +1,4 @@
-FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:3e31912
+FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:194344f
 
 COPY . ${LAMBDA_TASK_ROOT}
 
