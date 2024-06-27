@@ -32,12 +32,9 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /var/task
 
-# Create a constraints.txt file for awslambdaric to avoid PEP 517 builds
-RUN echo "awslambdaric" > constraints.txt
-
 # Install common packages
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-interaction --no-cache --no-ansi --only main -C constraints.txt
+RUN poetry init --no-interaction
+RUN poetry add boto3 awslambdaric
 
 ENV PATH="/var/task/.venv/bin:$PATH"
 
