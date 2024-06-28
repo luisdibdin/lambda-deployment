@@ -47,12 +47,12 @@ ARG FUNCTION_DIR
 
 WORKDIR ${FUNCTION_DIR}
 
-COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+COPY --chown=appuser:appgroup --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 
 ENV LAMBDA_TASK_ROOT=${FUNCTION_DIR}
 
-# Use the non-root user
-USER appuser
-
 # Set the default command to handle Lambda invocation
 ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
+
+# Use the non-root user
+USER appuser
