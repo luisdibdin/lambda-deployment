@@ -2,7 +2,7 @@
 FROM 975050106607.dkr.ecr.eu-west-2.amazonaws.com/base-image:28beb08
 
 # Copy the application code into the container
-COPY . ${LAMBDA_TASK_ROOT}
+COPY --chown=appuser:appgroup . ${LAMBDA_TASK_ROOT}
 
 # Install any application-specific dependencies
 # If you have a requirements.txt, you can install dependencies here
