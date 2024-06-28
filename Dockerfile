@@ -1,11 +1,11 @@
 ARG FUNCTION_DIR="/function"
 
-FROM python:3.12-alpine3.20 as python-alpine
+FROM python:3.12-alpine3.20 AS python-alpine
 
 RUN apk add --no-cache \
     libstdc++=13.2.1_git20240309-r0
 
-FROM python-alpine as build-image
+FROM python-alpine AS build-image
 
 # Add specific Alpine repositories to resolve dependencies
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.19/main" >> /etc/apk/repositories && \
